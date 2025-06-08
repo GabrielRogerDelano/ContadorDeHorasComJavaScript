@@ -1,0 +1,18 @@
+body { 
+    font-family: sans-serif; padding: 20px; 
+}
+table {
+    border-collapse: collapse; width: 100%; margin-bottom: 20px; 
+}
+th, td { 
+    border: 1px solid #a8a8a8; padding: 8px; text-align: center; 
+}
+input[type="time"], input[type="text"] { 
+    width: 90%; 
+}
+.resultado { 
+    font-weight: bold; margin-top: 10px;
+ }
+button { 
+    margin-top: 5px;
+ }

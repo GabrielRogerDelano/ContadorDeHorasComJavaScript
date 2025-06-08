@@ -1,31 +1,53 @@
-n1 = document.getElementById("num1")
-n2 = document.getElementById("num2")
-res = document.getElementsByClassName("resultado")[0]
+function AdicionarDia(){
+    const tbody = document.querySelector("#tabelasHoras tbody")
+    const tr = document.createElement("tr")
+    
+    tr.innerHTML = `
+    <td><input type="time" class="entrada1"></td>
+    <td><input type="time" class="saida1"></td>
+    <td class="Horas-dias">-</td>
+    <td><button type="button" onclick="RemoverDia(this)"><img src="lixeira-de-reciclagem.png" alt=""></button></td>`
+    
+    tbody.appendChild(tr)
+}
+
+function RemoverDia(botao){
+    botao.closest("tr").remove()
+}
 
 function Calcular(){
-    const horarioEntrada = new Date(`2000-01-01T${n1.value}:00`);
-    const horarioSaida = new Date(`2000-01-01T${n2.value}:00`);
+    const linhas = document.querySelectorAll("#tabelasHoras tbody tr");
+    let totalMinutos = 0
 
-    let h1 = FormatarMinutos(horarioEntrada.getHours(), horarioEntrada.getMinutes())
-    let h2 = FormatarMinutos(horarioSaida.getHours(), horarioSaida.getMinutes())
+    linhas.forEach(linha => {
+        const entrada1 = linha.querySelector(".entrada1")?.value
+        const saida1 = linha.querySelector(".saida1")?.value
+        const resultado = linha.querySelector(".Horas-dias")
+        
+        let minutosTotais = 0
 
-    const diferenca = h2 - h1;
-    console.log("Diferença em minutos:", diferenca);
+        if(entrada1 && saida1){
+            minutosTotais += calcularMinutosEntre(obterHorario(entrada1), obterHorario(saida1))
+        }
+
+        resultado.textContent = minutosTotais > 0 ? FormatarHoras(minutosTotais) : "-"
+        totalMinutos += minutosTotais
+    });
     
-    res.innerHTML = `Total de horas trabalhadas: ${FormatarHoras(diferenca)}`;
+    document.getElementById("resultadoTotal").innerText = `Total de horas: ${FormatarHoras(totalMinutos)}`
+}
+
+function obterHorario(hora){
+    return new Date(`2000-01-01T${hora}:00`);    
 }
 
 function calcularMinutosEntre(h1, h2) {
     let m1 = h1.getHours() * 60 + h1.getMinutes();
     let m2 = h2.getHours() * 60 + h2.getMinutes();
 
-    if (m2 < m1) m2 += 24 * 60; // suporta virada de dia
+    if (m2 < m1) m2 += 24 * 60;
 
     return m2 - m1;
-}
-
-function FormatarMinutos(horas, minutos){
-    return (horas * 60) + minutos
 }
 
 function FormatarHoras(minutos) {
